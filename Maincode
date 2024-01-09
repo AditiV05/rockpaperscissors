@@ -1,0 +1,94 @@
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+using namespace std;
+
+struct Score {
+  int wins = 0;
+  int losses = 0;
+  int ties = 0;
+};
+
+void updateScore(const Score & score) {
+  cout << "Wins: " << score.wins << ", Losses: " << score.losses
+       << ", Ties: " << score.ties << endl;
+}
+
+string pickComputerMove() { 
+  int randomNumber = rand() % 3;
+  if (randomNumber == 0) {
+    return "rock";
+  } else if (randomNumber == 1) {
+    return "paper";
+  } else {
+    return "scissors";
+  }
+}
+
+void playGame(const string &playerMove, Score &score) {
+  string computerMove = pickComputerMove();
+  string result = "";
+
+  if (playerMove == "rock") {
+    if (computerMove == "rock") {
+      result = "Tie";
+    } else if (computerMove == "paper") {
+      result = "You lose";
+      score.losses++;
+    } else if (computerMove == "scissors") {
+      result = "You win";
+      score.wins++;
+    }
+  } else if (playerMove == "paper") {
+    if (computerMove == "rock") {
+      result = "You win";
+      score.wins++;
+    } else if (computerMove == "paper") {
+      result = "Tie";
+      score.ties++;
+    } else if (computerMove == "scissors") {
+      result = "You lose";
+      score.losses++;
+    }
+  } else if (playerMove == "scissors") {
+    if (computerMove == "rock") {
+      result = "You lose";
+      score.losses++;
+    } else if (computerMove == "paper") {
+      result = "You win";
+      score.wins++;
+    } else if (computerMove == "scissors") {
+      result = "Tie";
+      score.ties++;
+    }
+  }
+
+  cout << "You: " << playerMove << " - Computer: " << computerMove << endl;
+  cout << result << endl;
+}
+
+int main() {
+  Score score;
+
+  srand(static_cast<unsigned int>(time(0)));
+
+  while (true) {
+    cout << "Enter your move (rock, paper, scissors) or 'exit' to quit: ";
+    string userMove;
+    cin >> userMove;
+
+    if (userMove == "exit") {
+      break;
+    }
+
+    if (userMove != "rock" && userMove != "paper" && userMove != "scissors") {
+      cout << "Invalid move! Please enter rock, paper, or scissors." << endl;
+      continue;
+    }
+
+    playGame(userMove, score);
+    updateScore(score);
+  }
+
+  return 0;
+}
